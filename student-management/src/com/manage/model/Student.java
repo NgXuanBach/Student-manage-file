@@ -1,17 +1,19 @@
 package com.manage.model;
 
+import com.manage.constant.Constant;
+
 public class Student {
 	private int id;
 	private String name;
 	private int age;
 	private String address;
 	private float gpa;
-	private String idClass;
+	private int idClass;
 
 	public Student() {
 	}
 
-	public Student(int id, String name, int age, String address, float gpa, String idClass) {
+	public Student(int id, String name, int age, String address, float gpa, int idClass) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -21,11 +23,11 @@ public class Student {
 		this.idClass = idClass;
 	}
 
-	public String getIdClass() {
+	public int getIdClass() {
 		return idClass;
 	}
 
-	public void setIdClass(String idClass) {
+	public void setIdClass(int idClass) {
 		this.idClass = idClass;
 	}
 
@@ -67,8 +69,9 @@ public class Student {
 
 	@Override
 	public String toString() {
-		// TODO Auto-generated method stub
-		return id + "," + name + "," + age + "," + address + "," + gpa + "," + idClass;
+		return id + Constant.REGEX_SPLIT_STRING + idClass + Constant.REGEX_SPLIT_STRING + name
+				+ Constant.REGEX_SPLIT_STRING + age + Constant.REGEX_SPLIT_STRING + address
+				+ Constant.REGEX_SPLIT_STRING + gpa;
 	}
 
 	public void setGpa(float gpa) {

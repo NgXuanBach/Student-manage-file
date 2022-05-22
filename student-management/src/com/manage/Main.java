@@ -7,11 +7,7 @@ import java.util.List;
 import java.util.Scanner;
 
 import com.manage.handle.FileHandler;
-import com.manage.handle.FileLopHandler;
-import com.manage.handle.FileStudentHandler;
 import com.manage.handle.IFileHandler;
-import com.manage.handle.IFileLopHandler;
-import com.manage.handle.IFileStudentHandler;
 import com.manage.handle.ILopHandler;
 import com.manage.handle.IStudentHandler;
 import com.manage.handle.LopHandler;
@@ -22,12 +18,10 @@ import com.manage.model.Student;
 public class Main {
 	private static LinkedList<Student> studentList;
 	private static Scanner scanner;
-	private static List<Lop> classList;
+	public static List<Lop> classList;
 	private static ILopHandler iLopHandler;
 	private static IStudentHandler iStudentHandler;
 	private static IFileHandler fileHandler = new FileHandler();
-	private static IFileLopHandler fileLopHandler = new FileLopHandler();
-	private static IFileStudentHandler fileStudentHandler = new FileStudentHandler();
 	private static final String FILECLASS = "D:/java-workspace/class.txt";
 	private static final String FILESTUDENT = "D:/java-workspace/student.txt";
 
@@ -37,9 +31,9 @@ public class Main {
 		studentList = new LinkedList<>();
 		classList = new ArrayList<>();
 		scanner = new Scanner(System.in);
-		fileLopHandler.readInToMemory(fileHandler.read(FILECLASS), classList);
-		fileStudentHandler.readInToMemory(fileHandler.read(FILESTUDENT), studentList);
 		int funcionNumber = -1;
+		iLopHandler.writeToMemory(classList, fileHandler.read(FILECLASS));
+		iStudentHandler.writeToMemory(studentList, fileHandler.read(FILESTUDENT));
 
 		do {
 			showMenu();
@@ -96,15 +90,15 @@ public class Main {
 					showStudent();
 					break;
 				case 11:
-					showClassByName();
+					showClassById();
 					break;
 				default:
 					System.out.println("Nhap sai, moi ban nhap lai.");
 					break;
 				}
 			} catch (Exception e) {
-				System.out.println("Nhap sai, moi ban nhap lai.");
 				scanner.next();
+				System.out.println("Nhap sai, moi ban nhap lai.");
 			}
 
 		} while (funcionNumber != 0);
@@ -116,8 +110,7 @@ public class Main {
 			return;
 		Student student = new Student();
 		iStudentHandler.add(student, studentList);
-		studentList.add(student);
-		iLopHandler.addStudentToClass(student, classList);
+		iStudentHandler.addStudentToClass(student, classList);
 		fileHandler.write(FILESTUDENT, student.toString() + "\n");
 	}
 
@@ -133,8 +126,7 @@ public class Main {
 		System.out.println("Nhap id sinh vien muon edit: ");
 		int findId = scanner.nextInt();
 		iStudentHandler.editStudent(findId, studentList);
-		fileLopHandler.write(FILESTUDENT, studentList);
-
+		fileHandler.write(FILESTUDENT, iStudentHandler.buildFileContent(studentList));
 	}
 
 	public static void deleteStudentById() {
@@ -142,7 +134,7 @@ public class Main {
 		System.out.println("nhap id sinh vien muon xoa. ");
 		int idDelete = scanner.nextInt();
 		iStudentHandler.deleteStudent(idDelete, studentList);
-		fileStudentHandler.write(FILESTUDENT, studentList);
+		fileHandler.write(FILESTUDENT, iStudentHandler.buildFileContent(studentList));
 	}
 
 	public static void deleteClassById() {
@@ -150,7 +142,7 @@ public class Main {
 		System.out.println("nhap id class muon xoa. ");
 		int idDelete = scanner.nextInt();
 		iLopHandler.deleteClass(idDelete, classList);
-		fileLopHandler.write(FILECLASS, classList);
+		fileHandler.write(FILECLASS, iLopHandler.buildFileContent(classList));
 	}
 
 	public static void editClassById() {
@@ -158,12 +150,12 @@ public class Main {
 		System.out.println("Nhap id class muon edit: ");
 		int findId = scanner.nextInt();
 		iLopHandler.editClass(findId, classList);
-		fileLopHandler.write(FILECLASS, classList);
+		fileHandler.write(FILECLASS, iLopHandler.buildFileContent(classList));
 
 	}
 
 	public static void showStudent() {
-		iStudentHandler.show(studentList);
+		iStudentHandler.showListStudent(studentList);
 	}
 
 	public static void sortStudentGpa() {
@@ -179,18 +171,17 @@ public class Main {
 
 	}
 
-	public static void showClassByName() {
-		System.out.println("nhap ten class muon show: ");
-		scanner.next();
-		String name = scanner.nextLine();
-		iLopHandler.showClassByName(name, classList);
+	public static void showClassById() {
+		System.out.println("nhap ID class muon show: ");
+		int id = scanner.nextInt();
+		iLopHandler.showClassById(id, classList);
 	}
 
 	public static void showMenu() {
 		System.out.println("1. Add Lớp\r\n" + "2. Edit Lớp by id.\r\n" + "3. Delete Lớp by id.\r\n"
 				+ "4. Sort Lớp by name..\r\n" + "5. Add student.\r\n" + "6. Edit student by id.\r\n"
 				+ "7. Delete student by id.\r\n" + "8. Sort student by gpa.\r\n" + "9. Sort student by name.\r\n"
-				+ "10. Show student.\r\n" + "11. Show class by name\r\n" + "0. Exit.\r\n"
+				+ "10. Show student.\r\n" + "11. Show class by ID\r\n" + "0. Exit.\r\n"
 				+ "/****************************************/\r\n" + "Moi ban nhap chuc nang: ");
 	}
 

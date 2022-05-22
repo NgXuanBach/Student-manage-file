@@ -3,62 +3,64 @@ package com.manage.handle;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Scanner;
 
+import com.manage.Main;
+import com.manage.constant.Constant;
+import com.manage.model.Lop;
 import com.manage.model.Student;
 
 public class StudentHandler implements IStudentHandler {
 	Scanner scan = new Scanner(System.in);
+	String checkk;
+
 	@Override
 	public void add(Student student, LinkedList<Student> studentList) {
 		boolean check;
 		int idStudent;
-		do {
-			check = false;
-			System.out.println("Id student: ");
-			idStudent = scan.nextInt();
-			for (Student student1 : studentList) {
-				if (idStudent == student1.getId())
-					System.out.println("Trung id vui long nhap lai");
-				check = true;
-				break;
-			}
+		try {
+			do {
+				check = false;
+				System.out.println("Id student: ");
+				idStudent = scan.nextInt();
+				for (Student student1 : studentList) {
+					if (idStudent == student1.getId()) {
+						System.out.println("Trung id vui long nhap lai");
+						check = true;
+						break;
+					}
+				}
 
-		} while (check == true);
-		student.setId(idStudent);
-		System.out.println("class student: ");
-		scan.next();
-		student.setIdClass(scan.nextLine());
-		student.setId(idStudent);
-		System.out.println("name student: ");
-		scan.next();
-		student.setName(scan.nextLine());
-		System.out.println("age student: ");
-		student.setAge(scan.nextInt());
-		System.out.println("address student: ");
-		scan.next();
-		student.setAddress(scan.nextLine());
-		System.out.println(" gpa student: ");
-		student.setGpa(scan.nextFloat());
-		System.out.println("add Student thanh cong! ");
+			} while (check == true);
+			student.setId(idStudent);
+			System.out.println("student class ID: ");
+			student.setIdClass(scan.nextInt());
+			System.out.println("student name: ");
+			scan.nextLine();
+			student.setName(scan.nextLine());
+			System.out.println("student age: ");
+			student.setAge(scan.nextInt());
+			System.out.println(" student address: ");
+			scan.nextLine();
+			student.setAddress(scan.nextLine());
+			System.out.println("student gpa: ");
+			student.setGpa(scan.nextFloat());
+			System.out.println("add Student thanh cong! ");
+			scan.nextLine();
+		} catch (Exception e) {
+			System.out.println("nhap sai vui long nhap lai. ");
+		}
 	}
 
 	@Override
-	public void show(LinkedList<Student> studentList) {
-		boolean test = false;
-		for (Student student : studentList) {
-			test = true;
-			System.out.println("Id student: " + student.getId());
-			System.out.println("class student: " + student.getIdClass());
-			System.out.println("name student: " + student.getName());
-			System.out.println("age student: " + student.getAge());
-			System.out.println("address student: " + student.getAddress());
-			System.out.println(" gpa student: " + student.getGpa());
-			System.out.println("/****************************************/");
-		}
-		if (test == false) {
-			System.out.println("Chua co sinh vien nao.");
-		}
+	public void show(Student student) {
+		System.out.println("Id student: " + student.getId());
+		System.out.println("Id class student: " + student.getIdClass());
+		System.out.println("name student: " + student.getName());
+		System.out.println("age student: " + student.getAge());
+		System.out.println("address student: " + student.getAddress());
+		System.out.println(" gpa student: " + student.getGpa());
 	}
 
 	@Override
@@ -108,7 +110,6 @@ public class StudentHandler implements IStudentHandler {
 
 			@Override
 			public int compare(Student o1, Student o2) {
-				// TODO Auto-generated method stub
 				return o1.getName().compareTo(o2.getName());
 
 			}
@@ -131,6 +132,59 @@ public class StudentHandler implements IStudentHandler {
 			System.out.println(" khong co id nay.");
 		}
 
+	}
+
+	@Override
+	public String buildFileContent(LinkedList<Student> studentList) {
+		StringBuilder builder = new StringBuilder();
+		for (Student student : studentList) {
+			builder.append(student + "\n");
+		}
+		return builder.toString();
+	}
+
+	@Override
+	public void writeToMemory(LinkedList<Student> studentList, List<String> memory) {
+		for (String line : memory) {
+			String[] list = line.split(Constant.REGEX_SPLIT_STRING);
+			Student student = new Student();
+			student.setId(Integer.valueOf(list[0]));
+			student.setIdClass(Integer.valueOf(list[1]));
+			student.setName(list[2]);
+			student.setAge(Integer.valueOf(list[3]));
+			student.setAddress(list[4]);
+			student.setGpa(Float.valueOf(list[5]));
+			studentList.add(student);
+			addStudentToClass(student, Main.classList);
+		}
+
+	}
+
+	@Override
+	public void addStudentToClass(Student student, List<Lop> classList) {
+		for (Lop lop : classList) {
+			if (lop.getStudentList() == null) {
+				lop.setStudentList(new LinkedList<Student>());
+			}
+			if (lop.getId() == student.getIdClass()) {
+				lop.addStudent(student);
+				break;
+			}
+		}
+
+	}
+
+	@Override
+	public void showListStudent(LinkedList<Student> studentList) {
+		boolean test = false;
+		for (Student student : studentList) {
+			test = true;
+			show(student);
+			System.out.println("/****************************************/");
+		}
+		if (test == false) {
+			System.out.println("Chua co sinh vien nao.");
+		}
 	}
 
 }

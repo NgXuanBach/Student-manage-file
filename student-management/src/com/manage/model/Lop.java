@@ -2,6 +2,8 @@ package com.manage.model;
 
 import java.util.LinkedList;
 
+import com.manage.constant.Constant;
+
 public class Lop {
 	private int id;
 	private String name;
@@ -53,10 +55,10 @@ public class Lop {
 	@Override
 	public String toString() {
 		// TODO Auto-generated method stub
-		return id + "," + name + "," + quantity;
+		return id + Constant.REGEX_SPLIT_STRING + name + Constant.REGEX_SPLIT_STRING + quantity;
 	}
 
-	public void addStudentList(Student student) {
+	public void addStudent(Student student) {
 		studentList.add(student);
 		quantity++;
 	}

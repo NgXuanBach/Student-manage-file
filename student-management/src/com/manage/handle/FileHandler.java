@@ -20,7 +20,7 @@ public class FileHandler implements IFileHandler {
 				System.out.println("File chua co.\ntao file thanh cong");
 			}
 		} catch (IOException e1) {
-			// TODO Auto-generated catch block
+
 			e1.printStackTrace();
 		}
 		FileWriter fileWriter = null;
@@ -32,7 +32,7 @@ public class FileHandler implements IFileHandler {
 			bufferedWriter.flush();
 			fileWriter.flush();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+
 			e.printStackTrace();
 		} finally {
 			try {
@@ -52,7 +52,6 @@ public class FileHandler implements IFileHandler {
 				System.out.println("File chua co.\ntao file thanh cong");
 			}
 		} catch (IOException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 		InputStream inputStream = null;
@@ -75,7 +74,7 @@ public class FileHandler implements IFileHandler {
 				inputStream.close();
 				reader.close();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
+
 				e.printStackTrace();
 			}
 		}
@@ -91,7 +90,7 @@ public class FileHandler implements IFileHandler {
 			fileWriter.flush();
 
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+
 			e.printStackTrace();
 		} finally {
 			try {

@@ -6,6 +6,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Scanner;
 
+import com.manage.constant.Constant;
 import com.manage.model.Lop;
 import com.manage.model.Student;
 
@@ -44,7 +45,11 @@ public class LopHandler implements ILopHandler {
 			System.out.println("class nay chua co student nao.");
 		} else {
 			for (Student student : studentList) {
-				System.out.println(student);
+				System.out.println("Id student: " + student.getId());
+				System.out.println("Id class student: " + student.getIdClass());
+				System.out.println("name student: " + student.getName());
+				System.out.println("age student: " + student.getAge());
+				System.out.println("address student: " + student.getAddress());
 				System.out.println(" gpa student: " + student.getGpa());
 				System.out.println("/****************************************/");
 			}
@@ -92,10 +97,10 @@ public class LopHandler implements ILopHandler {
 	}
 
 	@Override
-	public void showClassByName(String name, List<Lop> classList) {
+	public void showClassById(int id, List<Lop> classList) {
 		boolean test = false;
 		for (Lop clas : classList) {
-			if (clas.getName().toLowerCase().contains(name.toLowerCase())) {
+			if (clas.getId() == id) {
 				test = true;
 				showClass(clas);
 				System.out.println("/****************************************/");
@@ -141,14 +146,25 @@ public class LopHandler implements ILopHandler {
 	}
 
 	@Override
-	public void addStudentToClass(Student student, List<Lop> classList) {
+	public String buildFileContent(List<Lop> classList) {
+		StringBuilder builder = new StringBuilder();
 		for (Lop lop : classList) {
-			if (lop.getName().toLowerCase().contains(student.getIdClass())) {
-				lop.addStudentList(student);
-				break;
-			}
-			;
+			builder.append(lop + "\n");
 		}
+		return builder.toString();
+	}
+
+	@Override
+	public void writeToMemory(List<Lop> classList, List<String> memory) {
+		for (String line : memory) {
+			String[] list = line.split(Constant.REGEX_SPLIT_STRING);
+			Lop lop = new Lop();
+			lop.setId(Integer.valueOf(list[0]));
+			lop.setName(list[1]);
+			lop.setQuantily(Integer.valueOf(list[2]));
+			classList.add(lop);
+		}
+
 	}
 
 }

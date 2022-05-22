@@ -26,12 +26,13 @@ public interface ILopHandler {
 
 	public void sortClassByName(List<Lop> classList);
 
-	public void showClassByName(String name, List<Lop> classList);
+	public void showClassById(int name, List<Lop> classList);
 
 	public boolean showAllClass(List<Lop> classList);
 
 	public void deleteClass(int idDelete, List<Lop> classList);
 
-	public void addStudentToClass(Student student, List<Lop> classList);
+	public String buildFileContent(List<Lop> classList);
 
+	public void writeToMemory(List<Lop> classList, List<String> memory);
 }
